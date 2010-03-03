@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<CustomObject xmlns="http://soap.sforce.com/2006/04/metadata">
+    <deploymentStatus>Deployed</deploymentStatus>
+    <fields>
+        <fullName>Analysis__c</fullName>
+        <label>Analysis</label>
+        <picklist>
+            <picklistValues>
+                <fullName>Brochures</fullName>
+                <default>true</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Postage and Stationery</fullName>
+                <default>false</default>
+            </picklistValues>
+            <picklistValues>
+                <fullName>Telephones</fullName>
+                <default>false</default>
+            </picklistValues>
+            <sorted>false</sorted>
+        </picklist>
+        <type>Picklist</type>
+    </fields>
+    <fields>
+        <fullName>Journal__c</fullName>
+        <label>Journal</label>
+        <referenceTo>c2g__codaJournal__c</referenceTo>
+        <relationshipLabel>Simple Journals</relationshipLabel>
+        <relationshipName>Simple_Journals</relationshipName>
+        <type>Lookup</type>
+    </fields>
+    <fields>
+        <fullName>Value__c</fullName>
+        <label>Value</label>
+        <precision>18</precision>
+        <scale>2</scale>
+        <type>Number</type>
+    </fields>
+    <label>Simple Journal</label>
+    <listViews>
+        <fullName>All</fullName>
+        <columns>NAME</columns>
+        <columns>Value__c</columns>
+        <columns>Analysis__c</columns>
+        <columns>Journal__c</columns>
+        <filterScope>Everything</filterScope>
+        <label>All</label>
+    </listViews>
+    <nameField>
+        <displayFormat>SJNL-{000000}</displayFormat>
+        <label>Simple Journal</label>
+        <type>AutoNumber</type>
+    </nameField>
+    <pluralLabel>Simple Journals</pluralLabel>
+    <searchLayouts>
+        <listViewButtons>CreateJournals</listViewButtons>
+    </searchLayouts>
+    <sharingModel>ReadWrite</sharingModel>
+    <webLinks>
+        <fullName>CreateJournal</fullName>
+        <availability>online</availability>
+        <displayType>button</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Create Journal</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <url>{!REQUIRESCRIPT(&apos;/soap/ajax/17.0/connection.js&apos;)}
+{!REQUIRESCRIPT(&apos;/soap/ajax/17.0/apex.js&apos;)}
+var result = sforce.apex.execute(&apos;SimpleJournalWebService&apos;, &apos;createJournal&apos;, { id : &apos;{!SimpleJournal__c.Id}&apos; } );
+window.location.reload();</url>
+    </webLinks>
+    <webLinks>
+        <fullName>CreateJournals</fullName>
+        <availability>online</availability>
+        <displayType>massActionButton</displayType>
+        <linkType>javascript</linkType>
+        <masterLabel>Create Journals</masterLabel>
+        <openType>onClickJavaScript</openType>
+        <protected>false</protected>
+        <requireRowSelection>true</requireRowSelection>
+        <url>{!REQUIRESCRIPT(&apos;/soap/ajax/17.0/connection.js&apos;)}
+{!REQUIRESCRIPT(&apos;/soap/ajax/17.0/apex.js&apos;)}
+var idArr= {!GETRECORDIDS($ObjectType.c2g__codaInvoice__c)};
+var result = sforce.apex.execute(&apos;SimpleJournalImportWebService&apos;, &apos;createJournals&apos;, { ids : idArr } );
+alert(&apos;A background task to post the selected Invoices has been submitted.\nReview Apex Jobs for completion status.&apos;);</url>
+    </webLinks>
+</CustomObject>
